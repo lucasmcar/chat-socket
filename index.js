@@ -7,12 +7,10 @@ const io = new Server(server);
 
 io.on('connection', (socket) =>{
     socket.on('msg', (data) => {
-
-        io.emit('showmsg', (data) => {
-            console.log(data);
-       });
+        io.emit('showmsg', data);
     });
 });
+
 
 
 app.set('view engine', 'ejs');
@@ -24,7 +22,6 @@ app.get('/', (req, res) =>{
 
 server.listen(4001, () =>{
     console.log('Servidor rodando');
-
 });
 
 
