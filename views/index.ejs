@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        *{
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 0;
+            margin: 0;
+        }
+
+        #chat{
+            box-sizing: border-box;
+            border: 1px solid black;
+            height: 700px;
+        }
+
+        .container {
+            padding: 16px;
+            display: grid;
+            column-gap: 15px;
+            grid-template-areas: 'chat inputs';
+            grid-template-columns: 2fr 1fr;
+        }
+
+        #inputs{
+            display: flex;
+            flex-direction: column;
+        }
+
+        .msg{
+            height: 50px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            padding: 6px;
+        }
+
+        .user{
+            height: 25px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            padding: 6px;
+        }
+
+        .btn{
+            color: white;
+            background-color: rgb(120, 120, 225);
+            border: 1px solid #EFEFEF;
+            padding: 8px;
+            height: 35px;
+            border-radius: 6px;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+<div class="container">
+    <div id="chat">
+
+    </div>
+    <div id="inputs">
+        <input type="text" id="msg" placeholder="Sua Mensagem" class="msg">
+        <input type="text" id="username" placeholder="Usuario" class="user">
+        <button class="btn" onclick="enviar()">Enviar</button>
+    </div>
+    
+</div>
+    
+</body>
+<script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+<script>
+    var socket = io('http://localhost:4001');
+
+    /*socket.on('disconnect', () => {
+        console.log("Desconectado")
+    });*/
+
+    socket.on('showmsg', (data) =>{
+        var chat = document.getElementById('chat');
+        var p = document.createElement('p');
+        p.innerHTML = data.username + ": " + data.msg;
+        chat.append(p)
+    });
+
+    function enviar(){
+        var msgField = document.getElementById('msg');
+        var userField = document.getElementById('username');
+
+        var msge = msgField.value;
+        var user = userField.value;
+
+        socket.emit('msg', {msg : msge, username: user});
+
+
+    }
+</script>
+</html>
